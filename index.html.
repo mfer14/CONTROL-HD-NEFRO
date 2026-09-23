@@ -1,20 +1,721 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control HD Nefro</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control HD Nefro</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+}
+
+header {
+    background: #6f1835;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+header p {
+    margin: 6px 0 0;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 15px;
+}
+
+.search {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.patient {
+    background: white;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    cursor: pointer;
+}
+
+.patient:hover {
+    background: #fafafa;
+}
+
+.patient h3 {
+    margin: 0 0 6px;
+    color: #6f1835;
+}
+
+.patient p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    color: #6f1835;
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.data {
+    background: #f7f7f7;
+    padding: 10px;
+    border-radius: 7px;
+}
+
+.data strong {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+button {
+    background: #6f1835;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.back {
+    background: #555;
+    margin-bottom: 15px;
+}
+
+.session {
+    border-left: 4px solid #6f1835;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #fafafa;
+    border-radius: 5px;
+}
+
+.session h3 {
+    margin-top: 0;
+    color: #6f1835;
+}
+
+.hidden {
+    display: none;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.result {
+    background: #f1e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 10px;
+}
+
+.result strong {
+    color: #6f1835;
+}
+
+.danger {
+    color: #a00000;
+    font-weight: bold;
+}
+
+.good {
+    color: #176b35;
+    font-weight: bold;
+}
+</style>
 </head>
 
 <body>
 
+<header>
     <h1>CONTROL HD NEFRO</h1>
+    <p>Control y seguimiento de pacientes en hemodiálisis</p>
+</header>
 
-    <p>La página está funcionando correctamente.</p>
+<div class="container">
 
-    <h2>Paciente de prueba</h2>
+    <!-- LISTA DE PACIENTES -->
 
-    <p>Esta es una versión de prueba.</p>
+    <div id="patientList">
+
+        <input
+            type="text"
+            id="search"
+            class="search"
+            placeholder="🔎 Buscar paciente..."
+            onkeyup="searchPatients()"
+        >
+
+        <div class="patient" onclick="openPatient(0)">
+            <h3>Rogelio Martínez</h3>
+            <p><strong>Edad:</strong> 57 años</p>
+            <p><strong>Diagnóstico:</strong> ERC G5D secundaria a nefropatía diabética</p>
+            <p><strong>Acceso:</strong> CVC temporal</p>
+        </div>
+
+        <div class="patient" onclick="openPatient(1)">
+            <h3>Paciente de prueba 2</h3>
+            <p><strong>Edad:</strong> 64 años</p>
+            <p><strong>Diagnóstico:</strong> ERC G5D</p>
+            <p><strong>Acceso:</strong> FAV braquiocefálica</p>
+        </div>
+
+        <div class="patient" onclick="openPatient(2)">
+            <h3>Paciente de prueba 3</h3>
+            <p><strong>Edad:</strong> 49 años</p>
+            <p><strong>Diagnóstico:</strong> ERC G5D secundaria a DM2</p>
+            <p><strong>Acceso:</strong> CVC tunelizado</p>
+        </div>
+
+    </div>
+
+
+    <!-- FICHA DEL PACIENTE -->
+
+    <div id="patientDetail" class="hidden">
+
+        <button class="back" onclick="backToPatients()">← Regresar</button>
+
+        <div class="card">
+
+            <h2 id="patientName"></h2>
+
+            <div class="grid">
+
+                <div class="data">
+                    <strong>Edad</strong>
+                    <span id="patientAge"></span>
+                </div>
+
+                <div class="data">
+                    <strong>Diagnóstico</strong>
+                    <span id="patientDiagnosis"></span>
+                </div>
+
+                <div class="data">
+                    <strong>Acceso vascular</strong>
+                    <span id="patientAccess"></span>
+                </div>
+
+                <div class="data">
+                    <strong>Peso seco</strong>
+                    <span id="patientDryWeight"></span> kg
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Medicamentos</h2>
+
+            <p id="patientMeds"></p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Laboratorios</h2>
+
+            <div class="grid">
+
+                <div class="data">
+                    <strong>Hb</strong>
+                    <span id="labHb"></span>
+                </div>
+
+                <div class="data">
+                    <strong>K</strong>
+                    <span id="labK"></span>
+                </div>
+
+                <div class="data">
+                    <strong>Ca</strong>
+                    <span id="labCa"></span>
+                </div>
+
+                <div class="data">
+                    <strong>P</strong>
+                    <span id="labP"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Últimas sesiones</h2>
+
+            <div id="sessionHistory"></div>
+
+            <button onclick="showNewSession()">
+                + Nueva sesión de HD
+            </button>
+
+        </div>
+
+
+        <!-- NUEVA SESIÓN -->
+
+        <div id="newSession" class="card hidden">
+
+            <h2>Nueva sesión</h2>
+
+            <div class="form-group">
+                <label>Fecha</label>
+                <input type="date" id="sessionDate">
+            </div>
+
+            <div class="form-group">
+                <label>Peso pre-HD (kg)</label>
+                <input type="number" step="0.1" id="preWeight" oninput="calculateSession()">
+            </div>
+
+            <div class="form-group">
+                <label>Peso post-HD (kg)</label>
+                <input type="number" step="0.1" id="postWeight" oninput="calculateSession()">
+            </div>
+
+            <div class="form-group">
+                <label>Tiempo de HD (horas)</label>
+                <input type="number" step="0.1" id="hours" value="4" oninput="calculateSession()">
+            </div>
+
+            <div class="form-group">
+                <label>TA pre-HD</label>
+                <input type="text" id="bpPre" placeholder="Ej. 150/90">
+            </div>
+
+            <div class="form-group">
+                <label>TA post-HD</label>
+                <input type="text" id="bpPost" placeholder="Ej. 140/85">
+            </div>
+
+            <div class="form-group">
+                <label>Observaciones</label>
+                <textarea id="observations" placeholder="Eventos, síntomas, tolerancia, decisiones..."></textarea>
+            </div>
+
+
+            <div class="result">
+
+                <div>
+                    <strong>Ganancia interdialítica:</strong>
+                    <span id="idwg">0</span> kg
+                </div>
+
+                <div>
+                    <strong>UF realizada:</strong>
+                    <span id="uf">0</span> kg
+                </div>
+
+                <div>
+                    <strong>UF aproximada:</strong>
+                    <span id="ufMl">0</span> mL
+                </div>
+
+                <div>
+                    <strong>UF/kg/h:</strong>
+                    <span id="ufRate">0</span> mL/kg/h
+                </div>
+
+            </div>
+
+            <button onclick="saveSession()">
+                Guardar sesión
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const patients = [
+
+    {
+        name: "Rogelio Martínez",
+        age: 57,
+        diagnosis: "ERC G5D secundaria a nefropatía diabética",
+        access: "CVC temporal",
+        dryWeight: 69.5,
+        meds: "Metoprolol, hidralazina, furosemida, insulina glargina, epoetina.",
+        labs: {
+            hb: "10.2 g/dL",
+            k: "4.8 mEq/L",
+            ca: "8.4 mg/dL",
+            p: "5.6 mg/dL"
+        },
+        sessions: [
+            {
+                date: "11/09/2026",
+                pre: 72.3,
+                post: 69.3,
+                uf: 3.0,
+                hours: 4,
+                bpPre: "163/93",
+                bpPost: "150/88"
+            },
+            {
+                date: "09/09/2026",
+                pre: 70.2,
+                post: 69.3,
+                uf: 0.9,
+                hours: 4,
+                bpPre: "145/85",
+                bpPost: "138/82"
+            }
+        ]
+    },
+
+    {
+        name: "Paciente de prueba 2",
+        age: 64,
+        diagnosis: "ERC G5D",
+        access: "FAV braquiocefálica",
+        dryWeight: 70,
+        meds: "Losartán, amlodipino, epoetina.",
+        labs: {
+            hb: "9.8 g/dL",
+            k: "5.1 mEq/L",
+            ca: "8.2 mg/dL",
+            p: "6.1 mg/dL"
+        },
+        sessions: []
+    },
+
+    {
+        name: "Paciente de prueba 3",
+        age: 49,
+        diagnosis: "ERC G5D secundaria a DM2",
+        access: "CVC tunelizado",
+        dryWeight: 65,
+        meds: "Amlodipino, carvedilol, insulina.",
+        labs: {
+            hb: "10.5 g/dL",
+            k: "4.6 mEq/L",
+            ca: "8.7 mg/dL",
+            p: "4.9 mg/dL"
+        },
+        sessions: []
+    }
+
+];
+
+let currentPatient = null;
+
+
+function openPatient(index) {
+
+    currentPatient = index;
+
+    const p = patients[index];
+
+    document.getElementById("patientList").classList.add("hidden");
+    document.getElementById("patientDetail").classList.remove("hidden");
+
+    document.getElementById("patientName").textContent = p.name;
+    document.getElementById("patientAge").textContent = p.age + " años";
+    document.getElementById("patientDiagnosis").textContent = p.diagnosis;
+    document.getElementById("patientAccess").textContent = p.access;
+    document.getElementById("patientDryWeight").textContent = p.dryWeight;
+
+    document.getElementById("patientMeds").textContent = p.meds;
+
+    document.getElementById("labHb").textContent = p.labs.hb;
+    document.getElementById("labK").textContent = p.labs.k;
+    document.getElementById("labCa").textContent = p.labs.ca;
+    document.getElementById("labP").textContent = p.labs.p;
+
+    showSessions();
+
+}
+
+
+function showSessions() {
+
+    const sessions = patients[currentPatient].sessions;
+
+    const container = document.getElementById("sessionHistory");
+
+    container.innerHTML = "";
+
+    if (sessions.length === 0) {
+
+        container.innerHTML =
+        "<p>No hay sesiones registradas.</p>";
+
+        return;
+
+    }
+
+    sessions.forEach((s, index) => {
+
+        const div = document.createElement("div");
+
+        div.className = "session";
+
+        div.innerHTML = `
+            <h3>Sesión ${sessions.length - index}</h3>
+            <p><strong>Fecha:</strong> ${s.date}</p>
+            <p><strong>Peso pre:</strong> ${s.pre} kg</p>
+            <p><strong>Peso post:</strong> ${s.post} kg</p>
+            <p><strong>UF:</strong> ${s.uf.toFixed(1)} L</p>
+            <p><strong>TA:</strong> ${s.bpPre} → ${s.bpPost}</p>
+        `;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+function showNewSession() {
+
+    document.getElementById("newSession")
+    .classList.remove("hidden");
+
+    document.getElementById("sessionDate").value =
+        new Date().toISOString().split("T")[0];
+
+}
+
+
+function calculateSession() {
+
+    const pre =
+        parseFloat(document.getElementById("preWeight").value) || 0;
+
+    const post =
+        parseFloat(document.getElementById("postWeight").value) || 0;
+
+    const hours =
+        parseFloat(document.getElementById("hours").value) || 0;
+
+    const dry =
+        patients[currentPatient].dryWeight;
+
+
+    const interdialyticGain = pre - dry;
+
+    const uf = pre - post;
+
+    const ufMl = uf * 1000;
+
+    let ufRate = 0;
+
+    if (hours > 0 && post > 0) {
+
+        ufRate =
+            ufMl / post / hours;
+
+    }
+
+
+    document.getElementById("idwg").textContent =
+        interdialyticGain.toFixed(1);
+
+    document.getElementById("uf").textContent =
+        uf.toFixed(1);
+
+    document.getElementById("ufMl").textContent =
+        ufMl.toFixed(0);
+
+    document.getElementById("ufRate").textContent =
+        ufRate.toFixed(1);
+
+}
+
+
+function saveSession() {
+
+    const p = patients[currentPatient];
+
+    const date =
+        document.getElementById("sessionDate").value;
+
+    const pre =
+        parseFloat(document.getElementById("preWeight").value);
+
+    const post =
+        parseFloat(document.getElementById("postWeight").value);
+
+    const hours =
+        parseFloat(document.getElementById("hours").value);
+
+    const bpPre =
+        document.getElementById("bpPre").value;
+
+    const bpPost =
+        document.getElementById("bpPost").value;
+
+    const observations =
+        document.getElementById("observations").value;
+
+
+    if (!date || isNaN(pre) || isNaN(post)) {
+
+        alert("Completa al menos fecha, peso pre y peso post.");
+
+        return;
+
+    }
+
+
+    p.sessions.unshift({
+
+        date: date.split("-").reverse().join("/"),
+
+        pre: pre,
+
+        post: post,
+
+        uf: pre - post,
+
+        hours: hours,
+
+        bpPre: bpPre,
+
+        bpPost: bpPost,
+
+        observations: observations
+
+    });
+
+
+    showSessions();
+
+    document.getElementById("newSession")
+        .classList.add("hidden");
+
+
+    document.getElementById("preWeight").value = "";
+    document.getElementById("postWeight").value = "";
+    document.getElementById("bpPre").value = "";
+    document.getElementById("bpPost").value = "";
+    document.getElementById("observations").value = "";
+
+    alert("Sesión guardada correctamente.");
+
+}
+
+
+function backToPatients() {
+
+    document.getElementById("patientDetail")
+        .classList.add("hidden");
+
+    document.getElementById("patientList")
+        .classList.remove("hidden");
+
+}
+
+
+function searchPatients() {
+
+    const search =
+        document.getElementById("search")
+        .value
+        .toLowerCase();
+
+    const cards =
+        document.querySelectorAll(".patient");
+
+    cards.forEach(card => {
+
+        const text =
+            card.textContent.toLowerCase();
+
+        if (text.includes(search)) {
+
+            card.style.display = "block";
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+}
+
+</script>
 
 </body>
 </html>
