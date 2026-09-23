@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control HD</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f5f5f5;
+    color: #222;
+}
+
+header {
+    background: #6d1835;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+header p {
+    margin: 5px 0 0;
+}
+
+.container {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.patient {
+    border-left: 6px solid #6d1835;
+    cursor: pointer;
+}
+
+.patient h2 {
+    margin: 0 0 8px;
+}
+
+button {
+    background: #6d1835;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px;
+    margin: 6px 0 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.result {
+    background: #f1e7eb;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 12px;
+}
+
+.hidden {
+    display: none;
+}
+
+.label {
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>CONTROL HD</h1>
+    <p>Control de pacientes en hemodiálisis</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Pacientes</h2>
+
+        <div class="card patient" onclick="mostrarPaciente('Paciente de prueba 1')">
+            <h2>Paciente de prueba 1</h2>
+            <p>ERC estadio 5 · Hemodiálisis</p>
+        </div>
+
+        <div class="card patient" onclick="mostrarPaciente('Paciente de prueba 2')">
+            <h2>Paciente de prueba 2</h2>
+            <p>ERC estadio 5 · Hemodiálisis</p>
+        </div>
+
+        <div class="card patient" onclick="mostrarPaciente('Paciente de prueba 3')">
+            <h2>Paciente de prueba 3</h2>
+            <p>ERC estadio 5 · Hemodiálisis</p>
+        </div>
+    </div>
+
+    <div id="paciente" class="card hidden">
+        <h2 id="nombrePaciente"></h2>
+
+        <p><span class="label">Acceso:</span> CVC temporal</p>
+        <p><span class="label">Peso seco:</span> 69.5 kg</p>
+
+        <h3>Nueva sesión</h3>
+
+        <label>Peso prediálisis (kg)</label>
+        <input type="number" id="pre" step="0.1">
+
+        <label>Peso postdiálisis (kg)</label>
+        <input type="number" id="post" step="0.1">
+
+        <label>Ultrafiltración (L)</label>
+        <input type="number" id="uf" step="0.1">
+
+        <label>Horas de hemodiálisis</label>
+        <input type="number" id="horas" step="0.1">
+
+        <button onclick="calcular()">Calcular sesión</button>
+
+        <div id="resultado" class="result hidden"></div>
+    </div>
+
+</div>
+
+<script>
+
+function mostrarPaciente(nombre) {
+    document.getElementById("paciente").classList.remove("hidden");
+    document.getElementById("nombrePaciente").innerText = nombre;
+
+    window.scrollTo({
+        top: document.getElementById("paciente").offsetTop - 10,
+        behavior: "smooth"
+    });
+}
+
+function calcular() {
+
+    const pre = parseFloat(document.getElementById("pre").value);
+    const post = parseFloat(document.getElementById("post").value);
+    const uf = parseFloat(document.getElementById("uf").value);
+    const horas = parseFloat(document.getElementById("horas").value);
+
+    const pesoSeco = 69.5;
+
+    if (isNaN(pre) || isNaN(post) || isNaN(uf) || isNaN(horas)) {
+        alert("Completa todos los datos.");
+        return;
+    }
+
+    const ganancia = pre - post;
+    const exceso = pre - pesoSeco;
+    const ufKgHora = (uf * 1000) / (pesoSeco * horas);
+
+    document.getElementById("resultado").classList.remove("hidden");
+
+    document.getElementById("resultado").innerHTML = `
+        <strong>Resultados</strong><br><br>
+        Ganancia de peso: ${ganancia.toFixed(1)} kg<br>
+        Diferencia respecto a peso seco: ${exceso.toFixed(1)} kg<br>
+        UF: ${uf.toFixed(1)} L<br>
+        UF/kg/h: ${ufKgHora.toFixed(2)} mL/kg/h
+    `;
+}
+
+</script>
+
+</body>
+</html>
