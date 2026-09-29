@@ -6,348 +6,273 @@
 <title>CONTROL HD NEFRO</title>
 
 <style>
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f7f5f5;
-  color:#222;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f7f4f5;
+  color: #222;
 }
 
-header{
-  background:#6f1835;
-  color:white;
-  text-align:center;
-  padding:18px 12px;
+header {
+  background: #6f1835;
+  color: white;
+  padding: 18px 16px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
 }
 
-header h1{
-  margin:0;
-  font-size:23px;
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 16px;
 }
 
-header p{
-  margin:5px 0 0;
-  font-size:13px;
+.search-box {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-bottom: 16px;
 }
 
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:18px 14px 40px;
+.patient-card {
+  width: 100%;
+  display: block;
+  text-align: left;
+  background: white;
+  border: 2px solid #eadde2;
+  border-radius: 14px;
+  padding: 17px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.15s;
 }
 
-.section-title{
-  color:#6f1835;
-  font-size:21px;
-  font-weight:bold;
-  margin-bottom:14px;
+.patient-card:hover,
+.patient-card:active {
+  border-color: #6f1835;
+  background: #fffafb;
 }
 
-.search-box{
-  display:flex;
-  gap:8px;
-  margin-bottom:16px;
+.patient-name {
+  color: #6f1835;
+  font-size: 19px;
+  font-weight: bold;
+  margin-bottom: 7px;
 }
 
-.search-box input{
-  flex:1;
-  min-width:0;
-  padding:13px;
-  border:1px solid #ddd;
-  border-radius:9px;
-  font-size:16px;
-  background:white;
+.patient-info {
+  font-size: 14px;
+  line-height: 1.55;
 }
 
-.search-box button{
-  background:#6f1835;
-  color:white;
-  border:0;
-  border-radius:9px;
-  padding:0 16px;
-  font-weight:bold;
+button {
+  font-family: inherit;
 }
 
-.patient-list{
-  display:grid;
-  gap:12px;
+.back-button,
+.save-button,
+.action-button {
+  border: none;
+  border-radius: 9px;
+  padding: 11px 15px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-.patient-card{
-  background:white;
-  border:1px solid #e1dddd;
-  border-left:5px solid #6f1835;
-  border-radius:12px;
-  padding:16px;
-  cursor:pointer;
+.back-button {
+  background: #eee;
+  color: #333;
+  margin-bottom: 15px;
 }
 
-.patient-card:active{
-  transform:scale(.99);
+.save-button {
+  background: #6f1835;
+  color: white;
+  width: 100%;
+  margin-top: 10px;
 }
 
-.patient-card h3{
-  margin:0 0 7px;
-  color:#6f1835;
-  font-size:18px;
+.action-button {
+  background: #6f1835;
+  color: white;
 }
 
-.patient-card p{
-  margin:4px 0;
-  color:#555;
-  font-size:14px;
-  line-height:1.45;
+.section {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #eadde2;
 }
 
-.no-results{
-  background:white;
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:20px;
-  text-align:center;
-  color:#777;
+.section-title {
+  color: #6f1835;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 14px;
 }
 
-.hidden{
-  display:none !important;
+.sub-title {
+  color: #6f1835;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 14px 0 8px;
 }
 
-.back-button{
-  border:0;
-  background:none;
-  color:#6f1835;
-  font-weight:bold;
-  padding:0;
-  margin-bottom:12px;
-  font-size:15px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
-.patient-header{
-  background:white;
-  border:1px solid #e1dddd;
-  border-radius:12px;
-  padding:16px;
-  margin-bottom:14px;
+.field {
+  display: flex;
+  flex-direction: column;
 }
 
-.patient-header h2{
-  margin:0 0 8px;
-  color:#6f1835;
-}
-
-.patient-header p{
-  margin:4px 0;
-  font-size:14px;
-  color:#555;
-}
-
-.card{
-  background:white;
-  border:1px solid #e1dddd;
-  border-radius:12px;
-  padding:16px;
-  margin-bottom:14px;
-}
-
-.card h3{
-  color:#6f1835;
-  margin:0 0 14px;
-  font-size:17px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
-
-.field.full{
-  grid-column:1 / -1;
-}
-
-.field label{
-  font-size:12px;
-  font-weight:bold;
-  color:#555;
+.field label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
 }
 
 .field input,
-.field textarea{
-  width:100%;
-  padding:11px 10px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  background:white;
-  font-size:15px;
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  background: white;
 }
 
-.field input[readonly]{
-  background:#faf7f8;
-  color:#6f1835;
-  font-weight:bold;
+.field textarea {
+  min-height: 75px;
+  resize: vertical;
 }
 
-.field textarea{
-  min-height:75px;
-  resize:vertical;
+.full {
+  grid-column: 1 / -1;
 }
 
-.primary-button{
-  width:100%;
-  margin-top:12px;
-  padding:13px;
-  border:0;
-  border-radius:9px;
-  background:#6f1835;
-  color:white;
-  font-weight:bold;
-  font-size:15px;
+.data-row {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
 }
 
-.secondary-button{
-  padding:9px 12px;
-  border:1px solid #6f1835;
-  border-radius:8px;
-  background:white;
-  color:#6f1835;
-  font-weight:bold;
+.data-row:last-child {
+  border-bottom: none;
 }
 
-.summary{
-  background:#faf7f8;
-  border-left:4px solid #6f1835;
-  border-radius:8px;
-  padding:12px;
+.history-table-wrapper {
+  overflow-x: auto;
 }
 
-.summary p{
-  margin:6px 0;
-  font-size:14px;
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 900px;
 }
 
-.summary strong{
-  color:#6f1835;
+.history-table th,
+.history-table td {
+  border: 1px solid #ddd;
+  padding: 7px;
+  vertical-align: top;
 }
 
-.table-container{
-  overflow-x:auto;
+.history-table th {
+  background: #f1e7eb;
+  color: #6f1835;
 }
 
-table{
-  border-collapse:collapse;
-  width:100%;
-  min-width:950px;
-  font-size:12px;
+.pending-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
 }
 
-th{
-  background:#6f1835;
-  color:white;
-  padding:9px 7px;
-  text-align:left;
+.pending-item span {
+  flex: 1;
 }
 
-td{
-  border-bottom:1px solid #ddd;
-  padding:9px 7px;
-  vertical-align:top;
+.delete-button,
+.edit-button {
+  border: none;
+  border-radius: 7px;
+  padding: 6px 9px;
+  cursor: pointer;
 }
 
-.pending{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:9px 0;
-  border-bottom:1px solid #eee;
+.delete-button {
+  background: #eee;
 }
 
-.pending span{
-  flex:1;
-  font-size:14px;
+.edit-button {
+  background: #6f1835;
+  color: white;
 }
 
-.pending.done span{
-  text-decoration:line-through;
-  color:#888;
+.hidden {
+  display: none !important;
 }
 
-.delete-button{
-  border:0;
-  background:#f3e6ea;
-  color:#8a173c;
-  padding:7px 9px;
-  border-radius:7px;
+.result-message {
+  color: #666;
+  text-align: center;
+  padding: 20px;
 }
 
-.add-pending{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
+.patient-header {
+  background: #6f1835;
+  color: white;
+  border-radius: 14px;
+  padding: 17px;
+  margin-bottom: 16px;
 }
 
-.add-pending input{
-  flex:1;
-  min-width:0;
-  padding:10px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  font-size:15px;
+.patient-header h2 {
+  margin: 0 0 6px;
 }
 
-.med-row,
-.lab-row{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:9px 0;
-  border-bottom:1px solid #eee;
-  font-size:14px;
+.small {
+  font-size: 13px;
+  opacity: 0.95;
 }
 
-.med-row:last-child,
-.lab-row:last-child{
-  border-bottom:0;
+.ktv-result {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 9px;
+  background: #f7f0f3;
+  color: #6f1835;
+  font-weight: bold;
 }
 
-.ktv-result{
-  margin-top:12px;
-  background:#faf7f8;
-  border-radius:8px;
-  padding:12px;
-  color:#6f1835;
-  font-weight:bold;
-}
-
-.note{
-  margin-top:8px;
-  color:#777;
-  font-size:12px;
-}
-
-@media(max-width:600px){
-
-  .grid{
-    grid-template-columns:1fr;
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 
-  .field.full{
-    grid-column:auto;
+  .full {
+    grid-column: auto;
   }
 
-  .search-box button{
-    padding:0 13px;
+  .patient-name {
+    font-size: 18px;
   }
-
 }
 </style>
 </head>
@@ -355,229 +280,1429 @@ td{
 <body>
 
 <header>
-  <h1>CONTROL HD NEFRO</h1>
-  <p>Control y seguimiento de pacientes en hemodiálisis</p>
+  CONTROL HD NEFRO
 </header>
 
 <div class="container">
 
-<!-- =====================================================
-     PANTALLA DE PACIENTES
-===================================================== -->
+  <!-- ==================== LISTA DE PACIENTES ==================== -->
 
-<section id="patientsScreen">
-
-  <div class="section-title">PACIENTES</div>
-
-  <form id="searchForm" class="search-box">
+  <section id="patientsScreen">
 
     <input
-      type="search"
+      type="text"
       id="searchInput"
+      class="search-box"
       placeholder="Buscar paciente..."
-      autocomplete="off"
     >
-
-    <button type="submit">Buscar</button>
-
-  </form>
-
-
-  <!-- LAS TARJETAS EXISTEN DIRECTAMENTE EN HTML -->
-
-  <div id="patientList" class="patient-list">
 
     <div
       class="patient-card"
       data-id="1"
-      data-search="rogelio martinez rogelio martínez 57 erc g5d nefropatia diabetica cvc temporal"
+      data-search="rogelio martinez 57 erc g5d nefropatia diabetica cvc temporal"
+      onclick="openPatient(1)"
+      role="button"
+      tabindex="0"
     >
-
-      <h3>Rogelio Martínez</h3>
-
-      <p><strong>Edad:</strong> 57 años</p>
-
-      <p><strong>Diagnóstico:</strong>
-        ERC G5D secundaria a nefropatía diabética
-      </p>
-
-      <p><strong>Acceso:</strong> CVC temporal</p>
-
-      <p><strong>Peso seco:</strong> 69.5 kg</p>
-
+      <div class="patient-name">Rogelio Martínez</div>
+      <div class="patient-info">
+        57 años<br>
+        ERC G5D secundaria a nefropatía diabética<br>
+        Acceso: CVC temporal<br>
+        Peso seco: 69.5 kg
+      </div>
     </div>
-
 
     <div
       class="patient-card"
       data-id="2"
       data-search="paciente de prueba 2 64 erc g5d fav braquiocefalica"
+      onclick="openPatient(2)"
+      role="button"
+      tabindex="0"
     >
-
-      <h3>Paciente de prueba 2</h3>
-
-      <p><strong>Edad:</strong> 64 años</p>
-
-      <p><strong>Diagnóstico:</strong> ERC G5D</p>
-
-      <p><strong>Acceso:</strong> FAV braquiocefálica</p>
-
-      <p><strong>Peso seco:</strong> 70 kg</p>
-
+      <div class="patient-name">Paciente de prueba 2</div>
+      <div class="patient-info">
+        64 años<br>
+        ERC G5D<br>
+        Acceso: FAV braquiocefálica<br>
+        Peso seco: 70 kg
+      </div>
     </div>
-
 
     <div
       class="patient-card"
       data-id="3"
       data-search="paciente de prueba 3 49 erc g5d dm2 cvc tunelizado"
+      onclick="openPatient(3)"
+      role="button"
+      tabindex="0"
     >
+      <div class="patient-name">Paciente de prueba 3</div>
+      <div class="patient-info">
+        49 años<br>
+        ERC G5D secundaria a DM2<br>
+        Acceso: CVC tunelizado<br>
+        Peso seco: 65 kg
+      </div>
+    </div>
 
-      <h3>Paciente de prueba 3</h3>
+    <div id="noResults" class="result-message hidden">
+      No se encontraron pacientes.
+    </div>
 
-      <p><strong>Edad:</strong> 49 años</p>
+  </section>
 
-      <p><strong>Diagnóstico:</strong>
-        ERC G5D secundaria a DM2
-      </p>
 
-      <p><strong>Acceso:</strong> CVC tunelizado</p>
+  <!-- ==================== PACIENTE ==================== -->
 
-      <p><strong>Peso seco:</strong> 65 kg</p>
+  <section id="patientScreen" class="hidden">
+
+    <button
+      type="button"
+      class="back-button"
+      id="backButton"
+    >
+      ← Regresar a pacientes
+    </button>
+
+    <div id="patientHeader" class="patient-header"></div>
+
+
+    <!-- ==================== SESIÓN ACTUAL ==================== -->
+
+    <div class="section">
+
+      <div class="section-title">
+        SESIÓN ACTUAL
+      </div>
+
+      <div class="grid">
+
+        <div class="field">
+          <label>Fecha</label>
+          <input type="date" id="sessionDate">
+        </div>
+
+        <div class="field">
+          <label>Peso pre (kg)</label>
+          <input
+            type="number"
+            id="preWeight"
+            step="0.1"
+            inputmode="decimal"
+          >
+        </div>
+
+        <div class="field">
+          <label>UF calculado (L)</label>
+          <input
+            type="text"
+            id="calculatedUF"
+            readonly
+          >
+        </div>
+
+        <div class="field">
+          <label>Ganancia interdialítica (kg)</label>
+          <input
+            type="text"
+            id="interdialyticGain"
+            readonly
+          >
+        </div>
+
+        <div class="field full">
+          <label>Signos vitales</label>
+          <input
+            type="text"
+            id="vitals"
+            placeholder="TA 130/80, FC 78, FR 18, SatO₂ 96%, Temp 36.5°C"
+          >
+        </div>
+
+        <div class="field">
+          <label>Tiempo (h)</label>
+          <input
+            type="number"
+            id="hours"
+            step="0.5"
+            min="0"
+            inputmode="decimal"
+            value="4"
+          >
+        </div>
+
+        <div class="field">
+          <label>Peso post (kg)</label>
+          <input
+            type="number"
+            id="postWeight"
+            step="0.1"
+            inputmode="decimal"
+          >
+        </div>
+
+        <div class="field">
+          <label>UF realizada (L)</label>
+          <input
+            type="text"
+            id="realUF"
+            readonly
+          >
+        </div>
+
+        <div class="field">
+          <label>UF/kg/h</label>
+          <input
+            type="text"
+            id="ufKgHour"
+            readonly
+          >
+        </div>
+
+        <div class="field full">
+          <label>Observaciones</label>
+          <textarea
+            id="observations"
+            placeholder="Evolución, tolerancia, eventos, incidencias..."
+          ></textarea>
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="save-button"
+        id="saveSessionButton"
+      >
+        GUARDAR SESIÓN
+      </button>
 
     </div>
 
-  </div>
 
-  <div id="noResults" class="no-results hidden">
-    No se encontró ningún paciente.
-  </div>
+    <!-- ==================== ÚLTIMA SESIÓN PREVIA ==================== -->
 
-</section>
+    <div class="section">
 
+      <div class="section-title">
+        ÚLTIMA SESIÓN PREVIA
+      </div>
 
-<!-- =====================================================
-     PANTALLA DEL PACIENTE
-===================================================== -->
+      <div id="previousSession"></div>
 
-<section id="patientScreen" class="hidden">
-
-  <button
-    type="button"
-    class="back-button"
-    id="backButton"
-  >
-    ← Volver a pacientes
-  </button>
+    </div>
 
 
-  <div id="patientHeader" class="patient-header"></div>
+    <!-- ==================== HISTORIAL ==================== -->
+
+    <div class="section">
+
+      <div class="section-title">
+        HISTORIAL DE SESIONES
+      </div>
+
+      <div class="history-table-wrapper">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Peso pre</th>
+              <th>Peso post</th>
+              <th>Ganancia interdialítica</th>
+              <th>UF calculado</th>
+              <th>UF realizada</th>
+              <th>Tiempo</th>
+              <th>UF/kg/h</th>
+              <th>Signos vitales</th>
+              <th>Observaciones</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+
+    </div>
 
 
-  <!-- ===================================================
-       SESIÓN ACTUAL
-  ==================================================== -->
+    <!-- ==================== PENDIENTES ==================== -->
 
-  <div class="card">
+    <div class="section">
 
-    <h3>SESIÓN ACTUAL</h3>
+      <div class="section-title">
+        PENDIENTES PARA PRÓXIMA SESIÓN
+      </div>
 
-    <div class="grid">
+      <form id="pendingForm">
 
-      <!-- 1 FECHA -->
+        <div style="display:flex; gap:8px;">
 
-      <div class="field">
+          <input
+            type="text"
+            id="pendingInput"
+            placeholder="Agregar pendiente..."
+            style="flex:1; padding:10px; border:1px solid #ccc; border-radius:8px; font-size:15px;"
+          >
 
-        <label>Fecha</label>
+          <button
+            type="submit"
+            class="action-button"
+          >
+            Agregar
+          </button>
 
-        <input
-          type="date"
-          id="sessionDate"
-        >
+        </div>
+
+      </form>
+
+      <div id="pendingList"></div>
+
+    </div>
+
+
+    <!-- ==================== MEDICAMENTOS ==================== -->
+
+    <div class="section">
+
+      <div class="section-title">
+        MEDICAMENTOS
+      </div>
+
+      <div id="medications"></div>
+
+    </div>
+
+
+    <!-- ==================== LABORATORIOS ==================== -->
+
+    <div class="section">
+
+      <div class="section-title">
+        LABORATORIOS
+      </div>
+
+      <div id="labs"></div>
+
+    </div>
+
+
+    <!-- ==================== Kt/V ==================== -->
+
+    <div class="section">
+
+      <div class="section-title">
+        Kt/V
+      </div>
+
+      <div class="grid">
+
+        <div class="field">
+          <label>BUN pre (mg/dL)</label>
+          <input
+            type="number"
+            id="bunPre"
+            step="1"
+          >
+        </div>
+
+        <div class="field">
+          <label>BUN post (mg/dL)</label>
+          <input
+            type="number"
+            id="bunPost"
+            step="1"
+          >
+        </div>
+
+        <div class="field">
+          <label>Tiempo (h)</label>
+          <input
+            type="number"
+            id="ktvTime"
+            step="0.1"
+            value="4"
+          >
+        </div>
+
+        <div class="field">
+          <label>UF (L)</label>
+          <input
+            type="number"
+            id="ktvUF"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>V (L)</label>
+          <input
+            type="number"
+            id="ktvV"
+            step="0.1"
+            placeholder="Manual"
+          >
+        </div>
 
       </div>
 
+      <button
+        type="button"
+        class="save-button"
+        id="ktvButton"
+      >
+        CALCULAR Kt/V
+      </button>
 
-      <!-- 2 PESO PRE -->
+      <div
+        id="ktvResult"
+        class="ktv-result hidden"
+      ></div>
 
-      <div class="field">
+    </div>
 
-        <label>Peso pre (kg)</label>
+  </section>
 
-        <input
-          type="number"
-          id="preWeight"
-          step="0.1"
-          min="0"
+</div>
+
+
+<script>
+/* =========================================================
+   DATOS DE PACIENTES
+   ========================================================= */
+
+const patients = {
+
+  1: {
+    id: 1,
+    name: "Rogelio Martínez",
+    age: 57,
+    diagnosis: "ERC G5D secundaria a nefropatía diabética",
+    access: "CVC temporal",
+    dryWeight: 69.5,
+
+    sessions: [
+      {
+        id: "r1",
+        date: "2026-09-11",
+        pre: 72.3,
+        post: 69.3,
+        hours: 4,
+        vitals: "TA 163/93 → 172/104",
+        observations: "Sesión tolerada. Sin edema. Paciente estable."
+      },
+      {
+        id: "r2",
+        date: "2026-09-09",
+        pre: 70.2,
+        post: 69.3,
+        hours: 4,
+        vitals: "TA 145/85 → 138/82",
+        observations: "Sin eventos."
+      }
+    ],
+
+    pending: [
+      {
+        id: "p1",
+        text: "Revisar evolución de presión arterial"
+      }
+    ],
+
+    medications: [
+      "Eritropoyetina según esquema",
+      "Hierro según indicación",
+      "Antihipertensivos habituales"
+    ],
+
+    labs: [
+      "Hb: pendiente",
+      "K: pendiente",
+      "Ca: pendiente",
+      "P: pendiente",
+      "BUN: pendiente"
+    ]
+  },
+
+
+  2: {
+    id: 2,
+    name: "Paciente de prueba 2",
+    age: 64,
+    diagnosis: "ERC G5D",
+    access: "FAV braquiocefálica",
+    dryWeight: 70,
+
+    sessions: [],
+
+    pending: [],
+
+    medications: [
+      "Sin datos registrados"
+    ],
+
+    labs: [
+      "Sin datos registrados"
+    ]
+  },
+
+
+  3: {
+    id: 3,
+    name: "Paciente de prueba 3",
+    age: 49,
+    diagnosis: "ERC G5D secundaria a DM2",
+    access: "CVC tunelizado",
+    dryWeight: 65,
+
+    sessions: [],
+
+    pending: [],
+
+    medications: [
+      "Sin datos registrados"
+    ],
+
+    labs: [
+      "Sin datos registrados"
+    ]
+  }
+
+};
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+let currentPatient = null;
+let editingSessionId = null;
+
+
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
+
+const patientsScreen = document.getElementById("patientsScreen");
+const patientScreen = document.getElementById("patientScreen");
+
+const patientCards = document.querySelectorAll(".patient-card");
+
+const searchInput = document.getElementById("searchInput");
+const noResults = document.getElementById("noResults");
+
+const backButton = document.getElementById("backButton");
+
+const patientHeader = document.getElementById("patientHeader");
+
+const sessionDate = document.getElementById("sessionDate");
+const preWeight = document.getElementById("preWeight");
+const calculatedUF = document.getElementById("calculatedUF");
+const interdialyticGain = document.getElementById("interdialyticGain");
+const vitals = document.getElementById("vitals");
+const hours = document.getElementById("hours");
+const postWeight = document.getElementById("postWeight");
+const realUF = document.getElementById("realUF");
+const ufKgHour = document.getElementById("ufKgHour");
+const observations = document.getElementById("observations");
+
+const previousSession = document.getElementById("previousSession");
+const historyBody = document.getElementById("historyBody");
+
+const saveSessionButton = document.getElementById("saveSessionButton");
+
+const pendingForm = document.getElementById("pendingForm");
+const pendingInput = document.getElementById("pendingInput");
+const pendingList = document.getElementById("pendingList");
+
+const medications = document.getElementById("medications");
+const labs = document.getElementById("labs");
+
+const bunPre = document.getElementById("bunPre");
+const bunPost = document.getElementById("bunPost");
+const ktvTime = document.getElementById("ktvTime");
+const ktvUF = document.getElementById("ktvUF");
+const ktvV = document.getElementById("ktvV");
+const ktvButton = document.getElementById("ktvButton");
+const ktvResult = document.getElementById("ktvResult");
+
+
+/* =========================================================
+   ABRIR PACIENTE
+   ========================================================= */
+
+window.openPatient = function(id) {
+
+  const patient = patients[id];
+
+  if (!patient) {
+    return;
+  }
+
+  currentPatient = patient;
+  editingSessionId = null;
+
+  patientsScreen.classList.add("hidden");
+  patientScreen.classList.remove("hidden");
+
+  renderPatient();
+
+  prepareCurrentSession();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
+
+
+/* =========================================================
+   TECLADO PARA LAS FICHAS
+   ========================================================= */
+
+patientCards.forEach(card => {
+
+  card.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter" || event.key === " ") {
+
+      event.preventDefault();
+
+      const id = Number(card.dataset.id);
+
+      openPatient(id);
+    }
+
+  });
+
+});
+
+
+/* =========================================================
+   RENDER PACIENTE
+   ========================================================= */
+
+function renderPatient() {
+
+  if (!currentPatient) {
+    return;
+  }
+
+  patientHeader.innerHTML = `
+    <h2>${escapeHTML(currentPatient.name)}</h2>
+    <div class="small">
+      ${currentPatient.age} años ·
+      ${escapeHTML(currentPatient.diagnosis)}
+    </div>
+    <div class="small">
+      Acceso: ${escapeHTML(currentPatient.access)}
+    </div>
+    <div class="small">
+      Peso seco: ${currentPatient.dryWeight.toFixed(1)} kg
+    </div>
+  `;
+
+  renderPreviousSession();
+  renderHistory();
+  renderPending();
+  renderMedications();
+  renderLabs();
+}
+
+
+/* =========================================================
+   SESIÓN ACTUAL
+   ========================================================= */
+
+function prepareCurrentSession() {
+
+  editingSessionId = null;
+
+  sessionDate.value = new Date().toISOString().split("T")[0];
+
+  preWeight.value = "";
+  postWeight.value = "";
+
+  vitals.value = "";
+  hours.value = "4";
+
+  observations.value = "";
+
+  calculatedUF.value = "";
+  interdialyticGain.value = "";
+  realUF.value = "";
+  ufKgHour.value = "";
+
+  calculateSessionValues();
+}
+
+
+/* =========================================================
+   CÁLCULOS
+   ========================================================= */
+
+function calculateSessionValues() {
+
+  if (!currentPatient) {
+    return;
+  }
+
+  const pre = parseFloat(preWeight.value);
+  const post = parseFloat(postWeight.value);
+  const dry = parseFloat(currentPatient.dryWeight);
+  const h = parseFloat(hours.value);
+
+  /* UF calculado = peso pre - peso seco */
+
+  if (Number.isFinite(pre) && Number.isFinite(dry)) {
+
+    const ufCalculated = pre - dry;
+
+    calculatedUF.value =
+      Math.max(0, ufCalculated).toFixed(2);
+
+  } else {
+
+    calculatedUF.value = "";
+  }
+
+
+  /* Ganancia interdialítica =
+     peso pre actual - peso post de sesión previa */
+
+  const sorted = [...currentPatient.sessions]
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  const previous = sorted[0];
+
+  if (
+    Number.isFinite(pre) &&
+    previous &&
+    Number.isFinite(previous.post)
+  ) {
+
+    const gain = pre - previous.post;
+
+    interdialyticGain.value =
+      gain.toFixed(2);
+
+  } else {
+
+    interdialyticGain.value = "";
+  }
+
+
+  /* UF realizada = peso pre - peso post */
+
+  if (
+    Number.isFinite(pre) &&
+    Number.isFinite(post)
+  ) {
+
+    const uf = pre - post;
+
+    realUF.value =
+      Math.max(0, uf).toFixed(2);
+
+    if (
+      Number.isFinite(h) &&
+      h > 0 &&
+      post > 0
+    ) {
+
+      const ufMl = Math.max(0, uf) * 1000;
+
+      const result =
+        ufMl / post / h;
+
+      ufKgHour.value =
+        result.toFixed(2);
+
+    } else {
+
+      ufKgHour.value = "";
+    }
+
+  } else {
+
+    realUF.value = "";
+    ufKgHour.value = "";
+  }
+
+}
+
+
+preWeight.addEventListener("input", calculateSessionValues);
+postWeight.addEventListener("input", calculateSessionValues);
+hours.addEventListener("input", calculateSessionValues);
+
+
+/* =========================================================
+   ÚLTIMA SESIÓN PREVIA
+   ========================================================= */
+
+function renderPreviousSession() {
+
+  const sorted = [...currentPatient.sessions]
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  const previous = sorted[0];
+
+  if (!previous) {
+
+    previousSession.innerHTML =
+      `<div class="data-row">No hay sesiones previas registradas.</div>`;
+
+    return;
+  }
+
+  const gain = calculateGain(previous);
+  const ufCalculated =
+    Math.max(0, previous.pre - currentPatient.dryWeight);
+
+  const ufReal =
+    Math.max(0, previous.pre - previous.post);
+
+  const ufRate =
+    previous.hours > 0 && previous.post > 0
+      ? (ufReal * 1000) / previous.post / previous.hours
+      : null;
+
+  previousSession.innerHTML = `
+
+    <div class="data-row">
+      <strong>Fecha:</strong>
+      ${formatDate(previous.date)}
+    </div>
+
+    <div class="data-row">
+      <strong>Peso pre:</strong>
+      ${previous.pre.toFixed(1)} kg
+    </div>
+
+    <div class="data-row">
+      <strong>UF calculado:</strong>
+      ${ufCalculated.toFixed(2)} L
+    </div>
+
+    <div class="data-row">
+      <strong>Ganancia interdialítica:</strong>
+      ${gain !== null ? gain.toFixed(2) + " kg" : "N/D"}
+    </div>
+
+    <div class="data-row">
+      <strong>Signos vitales:</strong>
+      ${escapeHTML(previous.vitals || "Sin datos")}
+    </div>
+
+    <div class="data-row">
+      <strong>Tiempo:</strong>
+      ${previous.hours} h
+    </div>
+
+    <div class="data-row">
+      <strong>Peso post:</strong>
+      ${previous.post.toFixed(1)} kg
+    </div>
+
+    <div class="data-row">
+      <strong>UF realizada:</strong>
+      ${ufReal.toFixed(2)} L
+    </div>
+
+    <div class="data-row">
+      <strong>UF/kg/h:</strong>
+      ${ufRate !== null ? ufRate.toFixed(2) : "N/D"}
+    </div>
+
+    <div class="data-row">
+      <strong>Observaciones:</strong>
+      ${escapeHTML(previous.observations || "Sin observaciones")}
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   HISTORIAL
+   ========================================================= */
+
+function renderHistory() {
+
+  const sorted = [...currentPatient.sessions]
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  historyBody.innerHTML = "";
+
+  if (sorted.length === 0) {
+
+    historyBody.innerHTML = `
+      <tr>
+        <td colspan="11">
+          No hay sesiones registradas.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  sorted.forEach((session, index) => {
+
+    const previous = sorted[index + 1];
+
+    const gain =
+      previous
+        ? session.pre - previous.post
+        : null;
+
+    const ufCalculated =
+      Math.max(
+        0,
+        session.pre - currentPatient.dryWeight
+      );
+
+    const ufReal =
+      Math.max(
+        0,
+        session.pre - session.post
+      );
+
+    const ufRate =
+      session.hours > 0 && session.post > 0
+        ? (ufReal * 1000) /
+          session.post /
+          session.hours
+        : null;
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+
+      <td>${formatDate(session.date)}</td>
+
+      <td>${session.pre.toFixed(1)} kg</td>
+
+      <td>${session.post.toFixed(1)} kg</td>
+
+      <td>
+        ${gain !== null ? gain.toFixed(2) + " kg" : "N/D"}
+      </td>
+
+      <td>${ufCalculated.toFixed(2)} L</td>
+
+      <td>${ufReal.toFixed(2)} L</td>
+
+      <td>${session.hours} h</td>
+
+      <td>
+        ${ufRate !== null ? ufRate.toFixed(2) : "N/D"}
+      </td>
+
+      <td>
+        ${escapeHTML(session.vitals || "")}
+      </td>
+
+      <td>
+        ${escapeHTML(session.observations || "")}
+      </td>
+
+      <td>
+        <button
+          type="button"
+          class="edit-button"
+          onclick="editSession('${session.id}')"
         >
+          Editar
+        </button>
+      </td>
+    `;
 
+    historyBody.appendChild(row);
+
+  });
+
+}
+
+
+/* =========================================================
+   EDITAR SESIÓN
+   ========================================================= */
+
+window.editSession = function(id) {
+
+  if (!currentPatient) {
+    return;
+  }
+
+  const session =
+    currentPatient.sessions.find(
+      item => item.id === id
+    );
+
+  if (!session) {
+    return;
+  }
+
+  editingSessionId = id;
+
+  sessionDate.value = session.date;
+  preWeight.value = session.pre;
+  postWeight.value = session.post;
+  hours.value = session.hours;
+  vitals.value = session.vitals || "";
+  observations.value = session.observations || "";
+
+  calculateSessionValues();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+};
+
+
+/* =========================================================
+   GUARDAR SESIÓN
+   ========================================================= */
+
+saveSessionButton.addEventListener("click", function() {
+
+  if (!currentPatient) {
+    return;
+  }
+
+  const date = sessionDate.value;
+  const pre = parseFloat(preWeight.value);
+  const post = parseFloat(postWeight.value);
+  const h = parseFloat(hours.value);
+
+  if (!date || !Number.isFinite(pre) || !Number.isFinite(post)) {
+
+    alert("Completa fecha, peso pre y peso post.");
+
+    return;
+  }
+
+  if (post > pre) {
+
+    alert("El peso post no puede ser mayor que el peso pre.");
+
+    return;
+  }
+
+  if (!Number.isFinite(h) || h <= 0) {
+
+    alert("Ingresa un tiempo de sesión válido.");
+
+    return;
+  }
+
+
+  if (editingSessionId) {
+
+    const session =
+      currentPatient.sessions.find(
+        item => item.id === editingSessionId
+      );
+
+    if (session) {
+
+      session.date = date;
+      session.pre = pre;
+      session.post = post;
+      session.hours = h;
+      session.vitals = vitals.value.trim();
+      session.observations = observations.value.trim();
+
+    }
+
+  } else {
+
+    currentPatient.sessions.push({
+
+      id:
+        "s" +
+        Date.now(),
+
+      date: date,
+
+      pre: pre,
+
+      post: post,
+
+      hours: h,
+
+      vitals:
+        vitals.value.trim(),
+
+      observations:
+        observations.value.trim()
+    });
+
+  }
+
+  currentPatient.sessions.sort(
+    (a, b) =>
+      b.date.localeCompare(a.date)
+  );
+
+  editingSessionId = null;
+
+  renderPatient();
+
+  prepareCurrentSession();
+
+  alert("Sesión guardada.");
+
+});
+
+
+/* =========================================================
+   PENDIENTES
+   ========================================================= */
+
+pendingForm.addEventListener("submit", function(event) {
+
+  event.preventDefault();
+
+  const text = pendingInput.value.trim();
+
+  if (!text || !currentPatient) {
+    return;
+  }
+
+  currentPatient.pending.push({
+
+    id:
+      "p" +
+      Date.now(),
+
+    text: text,
+
+    done: false
+  });
+
+  pendingInput.value = "";
+
+  renderPending();
+
+});
+
+
+function renderPending() {
+
+  pendingList.innerHTML = "";
+
+  if (!currentPatient.pending.length) {
+
+    pendingList.innerHTML = `
+      <div class="data-row">
+        No hay pendientes registrados.
       </div>
+    `;
+
+    return;
+  }
+
+  currentPatient.pending.forEach(item => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "pending-item";
+
+    div.innerHTML = `
+
+      <input
+        type="checkbox"
+        ${item.done ? "checked" : ""}
+      >
+
+      <span>
+        ${escapeHTML(item.text)}
+      </span>
+
+      <button
+        type="button"
+        class="delete-button"
+      >
+        Eliminar
+      </button>
+    `;
+
+    const checkbox =
+      div.querySelector("input");
+
+    const deleteButton =
+      div.querySelector("button");
+
+    checkbox.addEventListener(
+      "change",
+      function() {
+
+        item.done =
+          checkbox.checked;
+
+      }
+    );
+
+    deleteButton.addEventListener(
+      "click",
+      function() {
+
+        currentPatient.pending =
+          currentPatient.pending.filter(
+            p => p.id !== item.id
+          );
+
+        renderPending();
+
+      }
+    );
+
+    pendingList.appendChild(div);
+
+  });
+
+}
 
 
-      <!-- 3 UF CALCULADO -->
+/* =========================================================
+   MEDICAMENTOS
+   ========================================================= */
 
-      <div class="field">
+function renderMedications() {
 
-        <label>UF calculado (L)</label>
+  medications.innerHTML =
+    currentPatient.medications
+      .map(
+        medication =>
+          `<div class="data-row">
+            ${escapeHTML(medication)}
+          </div>`
+      )
+      .join("");
 
-        <input
-          type="text"
-          id="ufCalculated"
-          readonly
-        >
-
-      </div>
-
-
-      <!-- 4 GANANCIA -->
-
-      <div class="field">
-
-        <label>Ganancia interdialítica (kg)</label>
-
-        <input
-          type="text"
-          id="interdialyticGain"
-          readonly
-        >
-
-      </div>
+}
 
 
-      <!-- 5 SIGNOS VITALES -->
+/* =========================================================
+   LABORATORIOS
+   ========================================================= */
 
-      <div class="field full">
+function renderLabs() {
 
-        <label>Signos vitales</label>
+  labs.innerHTML =
+    currentPatient.labs
+      .map(
+        lab =>
+          `<div class="data-row">
+            ${escapeHTML(lab)}
+          </div>`
+      )
+      .join("");
 
-        <input
-          type="text"
-          id="vitals"
-          placeholder="TA 130/80, FC 78, FR 18, SatO₂ 96%"
-        >
-
-      </div>
-
-
-      <!-- 6 TIEMPO -->
-
-      <div class="field">
-
-        <label>Tiempo (h)</label>
-
-        <input
-          type="number"
-          id="hours"
-          step="0.5"
-          min="0"
-          value="4"
-        >
-
-      </div>
+}
 
 
-      <!-- 7 PESO POST -->
+/* =========================================================
+   Kt/V
+   ========================================================= */
 
-      <div class="field">
+ktvButton.addEventListener("click", function() {
 
-        <label>Peso post (kg)</label
+  const pre = parseFloat(bunPre.value);
+  const post = parseFloat(bunPost.value);
+  const t = parseFloat(ktvTime.value);
+  const uf = parseFloat(ktvUF.value);
+  const v = parseFloat(ktvV.value);
+
+  if (
+    !Number.isFinite(pre) ||
+    !Number.isFinite(post) ||
+    !Number.isFinite(t) ||
+    !Number.isFinite(uf) ||
+    !Number.isFinite(v) ||
+    pre <= 0 ||
+    post <= 0 ||
+    t <= 0 ||
+    v <= 0
+  ) {
+
+    ktvResult.textContent =
+      "Completa todos los datos para calcular.";
+
+    ktvResult.classList.remove("hidden");
+
+    return;
+  }
+
+  if (post >= pre) {
+
+    ktvResult.textContent =
+      "El BUN post debe ser menor que el BUN pre.";
+
+    ktvResult.classList.remove("hidden");
+
+    return;
+  }
+
+  const R = post / pre;
+
+  const ktv =
+    -Math.log(
+      R - 0.008 * t
+    ) +
+    (4 - 3.5 * R) *
+    (uf / v);
+
+  if (!Number.isFinite(ktv)) {
+
+    ktvResult.textContent =
+      "No fue posible calcular el Kt/V con esos valores.";
+
+  } else {
+
+    ktvResult.textContent =
+      "spKt/V orientativo: " +
+      ktv.toFixed(2);
+
+  }
+
+  ktvResult.classList.remove("hidden");
+
+});
+
+
+/* =========================================================
+   REGRESAR
+   ========================================================= */
+
+backButton.addEventListener("click", function() {
+
+  currentPatient = null;
+  editingSessionId = null;
+
+  patientScreen.classList.add("hidden");
+  patientsScreen.classList.remove("hidden");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+});
+
+
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
+
+searchInput.addEventListener("input", function() {
+
+  const query =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+  let visible = 0;
+
+  patientCards.forEach(card => {
+
+    const text =
+      card.dataset.search
+        .toLowerCase();
+
+    const matches =
+      text.includes(query);
+
+    card.style.display =
+      matches ? "block" : "none";
+
+    if (matches) {
+      visible++;
+    }
+
+  });
+
+  noResults.classList.toggle(
+    "hidden",
+    visible !== 0
+  );
+
+});
+
+
+/* =========================================================
+   FUNCIONES AUXILIARES
+   ========================================================= */
+
+function calculateGain(session) {
+
+  if (!currentPatient) {
+    return null;
+  }
+
+  const previousSessions =
+    currentPatient.sessions
+      .filter(s => s.id !== session.id)
+      .sort(
+        (a, b) =>
+          b.date.localeCompare(a.date)
+      );
+
+  const previous =
+    previousSessions.find(
+      s => s.date < session.date
+    );
+
+  if (!previous) {
+    return null;
+  }
+
+  return session.pre - previous.post;
+}
+
+
+function formatDate(dateString) {
+
+  if (!dateString) {
+    return "";
+  }
+
+  const parts =
+    dateString.split("-");
+
+  if (parts.length !== 3) {
+    return dateString;
+  }
+
+  return (
+    parts[2] +
+    "/" +
+    parts[1] +
+    "/" +
+    parts[0]
+  );
+}
+
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+</script>
+
+</body>
+</html>
