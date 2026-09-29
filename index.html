@@ -6,15 +6,6 @@
 <title>CONTROL HD NEFRO</title>
 
 <style>
-:root{
-  --vino:#6f1835;
-  --vino-claro:#8d2a4b;
-  --fondo:#f7f5f5;
-  --gris:#666;
-  --borde:#e3dddd;
-  --verde:#28734a;
-}
-
 *{
   box-sizing:border-box;
 }
@@ -22,115 +13,100 @@
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
-  background:var(--fondo);
+  background:#f7f5f5;
   color:#222;
 }
 
-button,
-input,
-textarea{
-  font:inherit;
-}
-
 header{
-  background:var(--vino);
+  background:#6f1835;
   color:white;
-  padding:18px 16px;
   text-align:center;
+  padding:18px 12px;
 }
 
 header h1{
   margin:0;
-  font-size:22px;
-  letter-spacing:.5px;
+  font-size:23px;
 }
 
 header p{
   margin:5px 0 0;
   font-size:13px;
-  opacity:.9;
 }
 
 .container{
-  width:100%;
   max-width:900px;
   margin:auto;
   padding:18px 14px 40px;
 }
 
 .section-title{
-  color:var(--vino);
-  font-size:20px;
+  color:#6f1835;
+  font-size:21px;
   font-weight:bold;
-  margin:4px 0 14px;
+  margin-bottom:14px;
 }
 
-.search-row{
+.search-box{
   display:flex;
   gap:8px;
   margin-bottom:16px;
 }
 
-.search-row input{
+.search-box input{
   flex:1;
   min-width:0;
-  padding:13px 14px;
-  border:1px solid var(--borde);
-  border-radius:10px;
+  padding:13px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  font-size:16px;
   background:white;
-  outline:none;
 }
 
-.search-row input:focus{
-  border-color:var(--vino);
-}
-
-.search-row button{
-  border:0;
-  border-radius:10px;
-  padding:0 17px;
-  background:var(--vino);
+.search-box button{
+  background:#6f1835;
   color:white;
-  cursor:pointer;
+  border:0;
+  border-radius:9px;
+  padding:0 16px;
+  font-weight:bold;
 }
 
 .patient-list{
   display:grid;
-  grid-template-columns:1fr;
   gap:12px;
 }
 
 .patient-card{
   background:white;
-  border:1px solid var(--borde);
-  border-left:5px solid var(--vino);
+  border:1px solid #e1dddd;
+  border-left:5px solid #6f1835;
   border-radius:12px;
   padding:16px;
   cursor:pointer;
-  transition:.15s;
 }
 
-.patient-card:hover{
-  transform:translateY(-1px);
+.patient-card:active{
+  transform:scale(.99);
 }
 
-.patient-name{
+.patient-card h3{
+  margin:0 0 7px;
+  color:#6f1835;
   font-size:18px;
-  font-weight:bold;
-  color:var(--vino);
-  margin-bottom:6px;
 }
 
-.patient-info{
-  font-size:14px;
+.patient-card p{
+  margin:4px 0;
   color:#555;
-  line-height:1.5;
+  font-size:14px;
+  line-height:1.45;
 }
 
 .no-results{
   background:white;
-  border:1px solid var(--borde);
-  border-radius:12px;
+  border:1px solid #ddd;
+  border-radius:10px;
   padding:20px;
   text-align:center;
   color:#777;
@@ -140,28 +116,27 @@ header p{
   display:none !important;
 }
 
-.back-btn{
+.back-button{
   border:0;
-  background:transparent;
-  color:var(--vino);
+  background:none;
+  color:#6f1835;
   font-weight:bold;
   padding:0;
   margin-bottom:12px;
-  cursor:pointer;
+  font-size:15px;
 }
 
 .patient-header{
   background:white;
+  border:1px solid #e1dddd;
   border-radius:12px;
-  border:1px solid var(--borde);
   padding:16px;
   margin-bottom:14px;
 }
 
 .patient-header h2{
-  margin:0 0 7px;
-  color:var(--vino);
-  font-size:21px;
+  margin:0 0 8px;
+  color:#6f1835;
 }
 
 .patient-header p{
@@ -172,15 +147,15 @@ header p{
 
 .card{
   background:white;
-  border:1px solid var(--borde);
+  border:1px solid #e1dddd;
   border-radius:12px;
   padding:16px;
   margin-bottom:14px;
 }
 
 .card h3{
+  color:#6f1835;
   margin:0 0 14px;
-  color:var(--vino);
   font-size:17px;
 }
 
@@ -207,132 +182,88 @@ header p{
 }
 
 .field input,
-.field textarea,
-.field select{
+.field textarea{
   width:100%;
   padding:11px 10px;
-  border:1px solid var(--borde);
+  border:1px solid #ddd;
   border-radius:8px;
-  background:#fff;
-  outline:none;
+  background:white;
+  font-size:15px;
 }
 
-.field input:focus,
-.field textarea:focus{
-  border-color:var(--vino);
-}
-
-textarea{
-  resize:vertical;
-  min-height:75px;
-}
-
-.calc-box{
+.field input[readonly]{
   background:#faf7f8;
-  border:1px solid #eadde2;
-  border-radius:10px;
-  padding:12px;
-  margin-top:12px;
-}
-
-.calc-row{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:7px 0;
-  border-bottom:1px solid #eee;
-  font-size:14px;
-}
-
-.calc-row:last-child{
-  border-bottom:0;
-}
-
-.calc-label{
-  color:#555;
-}
-
-.calc-value{
+  color:#6f1835;
   font-weight:bold;
-  color:var(--vino);
-  text-align:right;
 }
 
-.primary-btn{
+.field textarea{
+  min-height:75px;
+  resize:vertical;
+}
+
+.primary-button{
   width:100%;
+  margin-top:12px;
+  padding:13px;
   border:0;
   border-radius:9px;
-  padding:13px;
-  background:var(--vino);
+  background:#6f1835;
   color:white;
   font-weight:bold;
-  cursor:pointer;
-  margin-top:12px;
+  font-size:15px;
 }
 
-.secondary-btn{
-  border:1px solid var(--vino);
-  border-radius:8px;
+.secondary-button{
   padding:9px 12px;
+  border:1px solid #6f1835;
+  border-radius:8px;
   background:white;
-  color:var(--vino);
-  cursor:pointer;
+  color:#6f1835;
   font-weight:bold;
 }
 
-.danger-btn{
-  border:0;
-  border-radius:8px;
-  padding:7px 10px;
-  background:#f1e6e9;
-  color:#8a173c;
-  cursor:pointer;
-}
-
-.session-summary{
+.summary{
   background:#faf7f8;
-  border-left:4px solid var(--vino);
+  border-left:4px solid #6f1835;
   border-radius:8px;
   padding:12px;
 }
 
-.session-summary p{
-  margin:5px 0;
+.summary p{
+  margin:6px 0;
   font-size:14px;
 }
 
-.session-summary strong{
-  color:var(--vino);
+.summary strong{
+  color:#6f1835;
 }
 
-.table-wrap{
+.table-container{
   overflow-x:auto;
-  width:100%;
 }
 
 table{
-  width:100%;
-  min-width:900px;
   border-collapse:collapse;
+  width:100%;
+  min-width:950px;
   font-size:12px;
 }
 
-th,
-td{
-  border-bottom:1px solid var(--borde);
+th{
+  background:#6f1835;
+  color:white;
   padding:9px 7px;
   text-align:left;
+}
+
+td{
+  border-bottom:1px solid #ddd;
+  padding:9px 7px;
   vertical-align:top;
 }
 
-th{
-  color:white;
-  background:var(--vino);
-  position:sticky;
-  top:0;
-}
-
-.pending-item{
+.pending{
   display:flex;
   align-items:center;
   gap:8px;
@@ -340,18 +271,22 @@ th{
   border-bottom:1px solid #eee;
 }
 
-.pending-item:last-child{
-  border-bottom:0;
-}
-
-.pending-item span{
+.pending span{
   flex:1;
   font-size:14px;
 }
 
-.pending-item.done span{
+.pending.done span{
   text-decoration:line-through;
   color:#888;
+}
+
+.delete-button{
+  border:0;
+  background:#f3e6ea;
+  color:#8a173c;
+  padding:7px 9px;
+  border-radius:7px;
 }
 
 .add-pending{
@@ -364,14 +299,9 @@ th{
   flex:1;
   min-width:0;
   padding:10px;
-  border:1px solid var(--borde);
+  border:1px solid #ddd;
   border-radius:8px;
-}
-
-.small-note{
-  font-size:12px;
-  color:#777;
-  margin-top:8px;
+  font-size:15px;
 }
 
 .med-row,
@@ -391,23 +321,21 @@ th{
 
 .ktv-result{
   margin-top:12px;
-  padding:13px;
   background:#faf7f8;
-  border-radius:9px;
+  border-radius:8px;
+  padding:12px;
+  color:#6f1835;
   font-weight:bold;
-  color:var(--vino);
 }
 
-.alert{
-  padding:10px 12px;
-  border-radius:8px;
-  margin-top:10px;
-  font-size:13px;
-  background:#f7eeee;
-  color:#7a263e;
+.note{
+  margin-top:8px;
+  color:#777;
+  font-size:12px;
 }
 
 @media(max-width:600px){
+
   .grid{
     grid-template-columns:1fr;
   }
@@ -416,14 +344,10 @@ th{
     grid-column:auto;
   }
 
-  .search-row button{
+  .search-box button{
     padding:0 13px;
   }
 
-  .container{
-    padding-left:11px;
-    padding-right:11px;
-  }
 }
 </style>
 </head>
@@ -435,19 +359,225 @@ th{
   <p>Control y seguimiento de pacientes en hemodiálisis</p>
 </header>
 
-<main class="container">
+<div class="container">
 
-  <!-- LISTA DE PACIENTES -->
-  <section id="patientsScreen">
+<!-- =====================================================
+     PANTALLA DE PACIENTES
+===================================================== -->
 
-    <div class="section-title">PACIENTES</div>
+<section id="patientsScreen">
 
-    <form id="searchForm" class="search-row">
-      <input
-        id="searchInput"
-        type="search"
-        placeholder="Buscar paciente..."
-        autocomplete="off"
-      >
-      <button type="submit">Buscar</button>
-   
+  <div class="section-title">PACIENTES</div>
+
+  <form id="searchForm" class="search-box">
+
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Buscar paciente..."
+      autocomplete="off"
+    >
+
+    <button type="submit">Buscar</button>
+
+  </form>
+
+
+  <!-- LAS TARJETAS EXISTEN DIRECTAMENTE EN HTML -->
+
+  <div id="patientList" class="patient-list">
+
+    <div
+      class="patient-card"
+      data-id="1"
+      data-search="rogelio martinez rogelio martínez 57 erc g5d nefropatia diabetica cvc temporal"
+    >
+
+      <h3>Rogelio Martínez</h3>
+
+      <p><strong>Edad:</strong> 57 años</p>
+
+      <p><strong>Diagnóstico:</strong>
+        ERC G5D secundaria a nefropatía diabética
+      </p>
+
+      <p><strong>Acceso:</strong> CVC temporal</p>
+
+      <p><strong>Peso seco:</strong> 69.5 kg</p>
+
+    </div>
+
+
+    <div
+      class="patient-card"
+      data-id="2"
+      data-search="paciente de prueba 2 64 erc g5d fav braquiocefalica"
+    >
+
+      <h3>Paciente de prueba 2</h3>
+
+      <p><strong>Edad:</strong> 64 años</p>
+
+      <p><strong>Diagnóstico:</strong> ERC G5D</p>
+
+      <p><strong>Acceso:</strong> FAV braquiocefálica</p>
+
+      <p><strong>Peso seco:</strong> 70 kg</p>
+
+    </div>
+
+
+    <div
+      class="patient-card"
+      data-id="3"
+      data-search="paciente de prueba 3 49 erc g5d dm2 cvc tunelizado"
+    >
+
+      <h3>Paciente de prueba 3</h3>
+
+      <p><strong>Edad:</strong> 49 años</p>
+
+      <p><strong>Diagnóstico:</strong>
+        ERC G5D secundaria a DM2
+      </p>
+
+      <p><strong>Acceso:</strong> CVC tunelizado</p>
+
+      <p><strong>Peso seco:</strong> 65 kg</p>
+
+    </div>
+
+  </div>
+
+  <div id="noResults" class="no-results hidden">
+    No se encontró ningún paciente.
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     PANTALLA DEL PACIENTE
+===================================================== -->
+
+<section id="patientScreen" class="hidden">
+
+  <button
+    type="button"
+    class="back-button"
+    id="backButton"
+  >
+    ← Volver a pacientes
+  </button>
+
+
+  <div id="patientHeader" class="patient-header"></div>
+
+
+  <!-- ===================================================
+       SESIÓN ACTUAL
+  ==================================================== -->
+
+  <div class="card">
+
+    <h3>SESIÓN ACTUAL</h3>
+
+    <div class="grid">
+
+      <!-- 1 FECHA -->
+
+      <div class="field">
+
+        <label>Fecha</label>
+
+        <input
+          type="date"
+          id="sessionDate"
+        >
+
+      </div>
+
+
+      <!-- 2 PESO PRE -->
+
+      <div class="field">
+
+        <label>Peso pre (kg)</label>
+
+        <input
+          type="number"
+          id="preWeight"
+          step="0.1"
+          min="0"
+        >
+
+      </div>
+
+
+      <!-- 3 UF CALCULADO -->
+
+      <div class="field">
+
+        <label>UF calculado (L)</label>
+
+        <input
+          type="text"
+          id="ufCalculated"
+          readonly
+        >
+
+      </div>
+
+
+      <!-- 4 GANANCIA -->
+
+      <div class="field">
+
+        <label>Ganancia interdialítica (kg)</label>
+
+        <input
+          type="text"
+          id="interdialyticGain"
+          readonly
+        >
+
+      </div>
+
+
+      <!-- 5 SIGNOS VITALES -->
+
+      <div class="field full">
+
+        <label>Signos vitales</label>
+
+        <input
+          type="text"
+          id="vitals"
+          placeholder="TA 130/80, FC 78, FR 18, SatO₂ 96%"
+        >
+
+      </div>
+
+
+      <!-- 6 TIEMPO -->
+
+      <div class="field">
+
+        <label>Tiempo (h)</label>
+
+        <input
+          type="number"
+          id="hours"
+          step="0.5"
+          min="0"
+          value="4"
+        >
+
+      </div>
+
+
+      <!-- 7 PESO POST -->
+
+      <div class="field">
+
+        <label>Peso post (kg)</label
