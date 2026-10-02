@@ -293,6 +293,36 @@ header {
   }
 }
 </style>
+  <div id="loginScreen" style="display:none; padding:30px; max-width:420px; margin:auto;">
+  <h2>CONTROL HD NEFRO</h2>
+  <p>INICIAR SESIÓN</p>
+
+  <input
+    id="loginEmail"
+    type="email"
+    placeholder="Correo electrónico"
+    autocomplete="email"
+    style="width:100%; padding:12px; margin:8px 0;"
+  >
+
+  <input
+    id="loginPassword"
+    type="password"
+    placeholder="Contraseña"
+    autocomplete="current-password"
+    style="width:100%; padding:12px; margin:8px 0;"
+  >
+
+  <button
+    id="loginButton"
+    type="button"
+    style="width:100%; padding:12px; margin-top:10px;"
+  >
+    ENTRAR
+  </button>
+
+  <p id="loginMessage" style="margin-top:10px;"></p>
+</div>
 </head>
 
 <body>
@@ -788,7 +818,48 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
-  
+  const loginScreen = document.getElementById("loginScreen");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginButton = document.getElementById("loginButton");
+const loginMessage = document.getElementById("loginMessage");
+
+async function checkSession() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    loginScreen.style.display = "none";
+  }
+}
+
+loginButton.addEventListener("click", async () => {
+  const email = loginEmail.value.trim();
+  const password = loginPassword.value;
+
+  if (!email || !password) {
+    loginMessage.textContent = "Ingresa correo y contraseña.";
+    return;
+  }
+
+  loginButton.disabled = true;
+  loginMessage.textContent = "Iniciando sesión...";
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  loginButton.disabled = false;
+
+  if (error) {
+    loginMessage.textContent = "Correo o contraseña incorrectos.";
+    return;
+  }
+
+  loginScreen.style.display = "none";
+});
+
+checkSession();
 /* =========================================================
    DATOS INICIALES
 ========================================================= */
