@@ -323,6 +323,22 @@ header {
 
   <p id="loginMessage" style="margin-top:10px;"></p>
 </div>
+  
+  <div id="resetScreen" style="display:none; padding:30px; max-width:420px; margin:auto; position:fixed; inset:0; z-index:100000; background:white;">
+  <h2>CONTROL HD NEFRO</h2>
+  <p>CAMBIAR CONTRASEÑA</p>
+
+  <input id="newPassword" type="password" placeholder="Nueva contraseña" style="width:100%; padding:12px; margin:8px 0;">
+
+  <input id="confirmPassword" type="password" placeholder="Confirmar contraseña" style="width:100%; padding:12px; margin:8px 0;">
+
+  <button id="resetPasswordButton" type="button" style="width:100%; padding:12px; margin-top:10px;">
+    GUARDAR NUEVA CONTRASEÑA
+  </button>
+
+  <p id="resetMessage" style="margin-top:10px;"></p>
+</div>
+  
 </head>
 
 <body>
@@ -829,6 +845,58 @@ const loginEmail = document.getElementById("loginEmail");
 const loginPassword = document.getElementById("loginPassword");
 const loginButton = document.getElementById("loginButton");
 const loginMessage = document.getElementById("loginMessage");
+  const resetScreen = document.getElementById("resetScreen");
+const newPassword = document.getElementById("newPassword");
+const confirmPassword = document.getElementById("confirmPassword");
+const resetPasswordButton = document.getElementById("resetPasswordButton");
+const resetMessage = document.getElementById("resetMessage");
+
+if (window.location.hash.includes("type=recovery")) {
+  loginScreen.style.display = "none";
+  resetScreen.style.display = "block";
+}
+
+resetPasswordButton.addEventListener("click", async () => {
+  const password = newPassword.value;
+  const confirm = confirmPassword.value;
+
+  if (!password || !confirm) {
+    resetMessage.textContent = "Completa ambos campos.";
+    return;
+  }
+
+  if (password.length < 6) {
+    resetMessage.textContent = "La contraseña debe tener al menos 6 caracteres.";
+    return;
+  }
+
+  if (password !== confirm) {
+    resetMessage.textContent = "Las contraseñas no coinciden.";
+    return;
+  }
+
+  resetPasswordButton.disabled = true;
+  resetMessage.textContent = "Guardando...";
+
+  const { error } = await supabaseClient.auth.updateUser({
+    password: password
+  });
+
+  resetPasswordButton.disabled = false;
+
+  if (error) {
+    resetMessage.textContent = "No se pudo cambiar la contraseña.";
+    return;
+  }
+
+  resetMessage.textContent = "Contraseña actualizada correctamente.";
+
+  setTimeout(() => {
+    window.location.hash = "";
+    resetScreen.style.display = "none";
+    loginScreen.style.display = "block";
+  }, 1500);
+});
 
 async function checkSession() {
   const { data: { session } } = await supabaseClient.auth.getSession();
