@@ -851,11 +851,17 @@ const confirmPassword = document.getElementById("confirmPassword");
 const resetPasswordButton = document.getElementById("resetPasswordButton");
 const resetMessage = document.getElementById("resetMessage");
 
-if (window.location.hash.includes("type=recovery")) {
-  loginScreen.style.display = "none";
-  resetScreen.style.display = "block";
-}
+supabaseClient.auth.onAuthStateChange(async (event, session) => {
+  if (event === "PASSWORD_RECOVERY") {
+    loginScreen.style.display = "none";
+    resetScreen.style.display = "block";
+  }
 
+  if (event === "SIGNED_IN" && session) {
+    loginScreen.style.display = "none";
+  }
+});
+  
 resetPasswordButton.addEventListener("click", async () => {
   const password = newPassword.value;
   const confirm = confirmPassword.value;
