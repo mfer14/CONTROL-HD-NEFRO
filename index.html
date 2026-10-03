@@ -882,28 +882,43 @@ resetPasswordButton.addEventListener("click", async () => {
   }
 
   resetPasswordButton.disabled = true;
-  resetMessage.textContent = "Guardando...";
+  resetMessage.textContent = "Verificando recuperación...";
+
+  const { data: { session }, error: sessionError } =
+    await supabaseClient.auth.getSession();
+
+  if (sessionError || !session) {
+    resetMessage.textContent =
+      "La sesión de recuperación no está disponible. Usa un enlace de recuperación nuevo.";
+    resetPasswordButton.disabled = false;
+    return;
+  }
+
+  resetMessage.textContent = "Guardando nueva contraseña...";
 
   const { error } = await supabaseClient.auth.updateUser({
     password: password
   });
 
-  resetPasswordButton.disabled = false;
-
   if (error) {
-    resetMessage.textContent = "No se pudo cambiar la contraseña.";
+    resetMessage.textContent = "ERROR: " + error.message;
+    resetPasswordButton.disabled = false;
     return;
   }
 
-  resetMessage.textContent = "Contraseña actualizada correctamente.";
+  resetMessage.textContent =
+    "Contraseña actualizada correctamente.";
 
-  setTimeout(() => {
+  setTimeout(async () => {
+    await supabaseClient.auth.signOut();
     window.location.hash = "";
     resetScreen.style.display = "none";
     loginScreen.style.display = "block";
+    newPassword.value = "";
+    confirmPassword.value = "";
+    resetPasswordButton.disabled = false;
   }, 1500);
 });
-
 async function checkSession() {
   const { data: { session } } = await supabaseClient.auth.getSession();
 
