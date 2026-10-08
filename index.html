@@ -1614,7 +1614,7 @@ saveNewPatientButton.addEventListener(
       );
 
       alert(
-        "No se pudo guardar el paciente."
+        "ERROR SUPABASE: " + error.message
       );
 
       saveNewPatientButton.disabled = false;
