@@ -1520,7 +1520,7 @@ function clearNewPatientForm() {
 
 saveNewPatientButton.addEventListener(
   "click",
-  function() {
+  async function() {
 
     const name =
       newName.value.trim();
@@ -1541,11 +1541,7 @@ saveNewPatientButton.addEventListener(
       newAccess.value;
 
     if (!name) {
-
-      alert(
-        "Escribe el nombre del paciente."
-      );
-
+      alert("Escribe el nombre del paciente.");
       return;
     }
 
@@ -1554,11 +1550,7 @@ saveNewPatientButton.addEventListener(
       age <= 0 ||
       age > 120
     ) {
-
-      alert(
-        "Ingresa una edad válida."
-      );
-
+      alert("Ingresa una edad válida.");
       return;
     }
 
@@ -1566,85 +1558,94 @@ saveNewPatientButton.addEventListener(
       !Number.isFinite(dryWeight) ||
       dryWeight <= 0
     ) {
-
-      alert(
-        "Ingresa un peso seco válido."
-      );
-
+      alert("Ingresa un peso seco válido.");
       return;
     }
 
     if (!diagnosis) {
+      alert("Ingresa el diagnóstico.");
+      return;
+    }
+
+    const {
+      data: { user },
+      error: userError
+    } = await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+      alert("La sesión no está disponible.");
+      return;
+    }
+
+    saveNewPatientButton.disabled = true;
+    saveNewPatientButton.textContent = "GUARDANDO...";
+
+    const { data, error } =
+      await supabaseClient
+        .from("patients")
+        .insert({
+          user_id: user.id,
+          name: name,
+          age: age,
+          dry_weight: dryWeight,
+          diagnosis: diagnosis,
+          etiology: etiology,
+          access: access,
+          start_date: newStartDate.value || null,
+          schedule:
+            newSchedule.value.trim(),
+          general_observations:
+            newObservations.value.trim(),
+          medications: [
+            "Sin datos registrados"
+          ],
+          labs: [
+            "Sin datos registrados"
+          ]
+        })
+        .select()
+        .single();
+
+    if (error) {
+
+      console.error(
+        "Error guardando paciente:",
+        error
+      );
 
       alert(
-        "Ingresa el diagnóstico."
+        "No se pudo guardar el paciente."
       );
+
+      saveNewPatientButton.disabled = false;
+      saveNewPatientButton.textContent =
+        "GUARDAR PACIENTE";
 
       return;
     }
 
+    patients[data.id] = {
 
-    /* Crear nuevo ID */
-
-    const existingIds =
-      Object.keys(patients)
-        .map(Number)
-        .filter(Number.isFinite);
-
-    const newId =
-      existingIds.length
-        ? Math.max(...existingIds) + 1
-        : 1;
-
-
-    /* Crear paciente */
-
-    patients[newId] = {
-
-      id: newId,
-
-      name: name,
-
-      age: age,
-
-      diagnosis: diagnosis,
-
-      etiology: etiology,
-
-      access: access,
-
-      dryWeight: dryWeight,
-
-      startDate:
-        newStartDate.value,
-
-      schedule:
-        newSchedule.value.trim(),
-
+      id: data.id,
+      name: data.name,
+      age: data.age,
+      diagnosis: data.diagnosis,
+      etiology: data.etiology,
+      access: data.access,
+      dryWeight: Number(data.dry_weight),
+      startDate: data.start_date || "",
+      schedule: data.schedule || "",
       generalObservations:
-        newObservations.value.trim(),
-
+        data.general_observations || "",
       sessions: [],
-
       pending: [],
-
-      medications: [
-        "Sin datos registrados"
-      ],
-
-      labs: [
-        "Sin datos registrados"
-      ]
-
+      medications:
+        data.medications ||
+        ["Sin datos registrados"],
+      labs:
+        data.labs ||
+        ["Sin datos registrados"]
     };
-
-
-    /* Guardar */
-
-    savePatients();
-
-
-    /* Volver a pacientes */
 
     newPatientScreen.classList.add(
       "hidden"
@@ -1658,6 +1659,12 @@ saveNewPatientButton.addEventListener(
 
     searchInput.value = "";
 
+    clearNewPatientForm();
+
+    saveNewPatientButton.disabled = false;
+    saveNewPatientButton.textContent =
+      "GUARDAR PACIENTE";
+
     alert(
       "Paciente agregado correctamente."
     );
@@ -1669,8 +1676,7 @@ saveNewPatientButton.addEventListener(
 
   }
 );
-
-
+  
 /* =========================================================
    ABRIR PACIENTE
 ========================================================= */
