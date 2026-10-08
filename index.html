@@ -2871,7 +2871,21 @@ function escapeHTML(value) {
    INICIAR
 ========================================================= */
 
-renderPatientCards();
+(async function iniciarAplicacion() {
+
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+    return;
+  }
+
+  patients = await loadPatients();
+
+  renderPatientCards();
+
+})();
 
 </script>
 
