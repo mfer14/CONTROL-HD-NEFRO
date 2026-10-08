@@ -1063,60 +1063,129 @@ const defaultPatients = {
    CARGAR PACIENTES GUARDADOS
 ========================================================= */
 
-let patients = loadPatients();
+  let patients = {};
 
-function loadPatients() {
+async function loadPatients() {
 
-  try {
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
 
-    const saved =
-      localStorage.getItem("controlHDPatients");
+  if (userError || !user) {
+    console.log("No hay usuario autenticado.");
+    return {};
+  }
 
-    if (saved) {
+  const { data, error } = await supabaseClient
+    .from("patients")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("name");
 
-      const parsed =
-        JSON.parse(saved);
+  if (error) {
+    console.error("Error cargando pacientes:", error);
+    alert("No se pudieron cargar los pacientes.");
+    return {};
+  }
 
-      if (
-        parsed &&
-        typeof parsed === "object"
-      ) {
+  const result = {};
 
-        return parsed;
+  data.forEach(patient => {
 
-      }
+    result[patient.id] = {
+      id: patient.id,
+      name: patient.name,
+      age: patient.age,
+      diagnosis: patient.diagnosis,
+      etiology: patient.etiology,
+      access: patient.access,
+      dryWeight: Number(patient.dry_weight),
+      startDate: patient.start_date || "",
+      schedule: patient.schedule || "",
+      generalObservations:
+        patient.general_observations || "",
+      sessions: [],
+      pending: [],
+      medications:
+        patient.medications || ["Sin datos registrados"],
+      labs:
+        patient.labs || ["Sin datos registrados"]
+    };
+
+  });
+
+  const patientIds = Object.keys(result);
+
+  if (patientIds.length) {
+
+    const {
+      data: sessions,
+      error: sessionsError
+    } = await supabaseClient
+      .from("sessions")
+      .select("*")
+      .in("patient_id", patientIds)
+      .eq("user_id", user.id)
+      .order("session_date", {
+        ascending: false
+      });
+
+    if (!sessionsError && sessions) {
+
+      sessions.forEach(session => {
+
+        if (result[session.patient_id]) {
+
+          result[session.patient_id].sessions.push({
+            id: session.id,
+            date: session.session_date,
+            pre: Number(session.pre_weight),
+            post: Number(session.post_weight),
+            hours: Number(session.hours),
+            vitals: session.vitals || "",
+            observations:
+              session.observations || ""
+          });
+
+        }
+
+      });
 
     }
 
-  } catch (error) {
+    const {
+      data: pending,
+      error: pendingError
+    } = await supabaseClient
+      .from("pending")
+      .select("*")
+      .in("patient_id", patientIds)
+      .eq("user_id", user.id)
+      .order("created_at");
 
-    console.log("No se pudieron cargar los pacientes.");
+    if (!pendingError && pending) {
+
+      pending.forEach(item => {
+
+        if (result[item.patient_id]) {
+
+          result[item.patient_id].pending.push({
+            id: item.id,
+            text: item.text,
+            done: item.done
+          });
+
+        }
+
+      });
+
+    }
 
   }
 
-  return defaultPatients;
+  return result;
 }
-
-
-function savePatients() {
-
-  try {
-
-    localStorage.setItem(
-      "controlHDPatients",
-      JSON.stringify(patients)
-    );
-
-  } catch (error) {
-
-    alert(
-      "No se pudieron guardar los datos en este navegador."
-    );
-
-  }
-
-}
-
 
 /* =========================================================
    VARIABLES
