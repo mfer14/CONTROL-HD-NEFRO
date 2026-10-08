@@ -851,7 +851,12 @@ const confirmPassword = document.getElementById("confirmPassword");
 const resetPasswordButton = document.getElementById("resetPasswordButton");
 const resetMessage = document.getElementById("resetMessage");
 
-supabaseClient.auth.onAuthStateChange(async (event, session) => {
+if (window.location.hash.includes("type=recovery")) {
+  loginScreen.style.display = "none";
+  resetScreen.style.display = "block";
+}
+
+supabaseClient.auth.onAuthStateChange((event, session) => {
   if (event === "PASSWORD_RECOVERY") {
     loginScreen.style.display = "none";
     resetScreen.style.display = "block";
