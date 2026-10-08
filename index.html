@@ -851,7 +851,11 @@ const confirmPassword = document.getElementById("confirmPassword");
 const resetPasswordButton = document.getElementById("resetPasswordButton");
 const resetMessage = document.getElementById("resetMessage");
 
-if (window.location.hash.includes("type=recovery")) {
+const isRecovery =
+  window.location.hash.includes("type=recovery") ||
+  new URLSearchParams(window.location.search).has("code");
+
+if (isRecovery) {
   loginScreen.style.display = "none";
   resetScreen.style.display = "block";
 }
