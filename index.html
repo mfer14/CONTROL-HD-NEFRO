@@ -2264,149 +2264,121 @@ function(id) {
    GUARDAR SESIÓN
 ========================================================= */
 
-saveSessionButton.addEventListener(
-  "click",
-  function() {
+saveSessionButton.addEventListener("click", async function() {
+  if (!currentPatient) return;
 
-    if (!currentPatient) {
-      return;
-    }
+  const date = sessionDate.value;
+  const pre = parseFloat(preWeight.value);
+  const post = parseFloat(postWeight.value);
+  const h = parseFloat(hours.value);
 
-    const date =
-      sessionDate.value;
+  if (!date || !Number.isFinite(pre) || !Number.isFinite(post)) {
+    alert("Completa fecha, peso pre y peso post.");
+    return;
+  }
 
-    const pre =
-      parseFloat(preWeight.value);
+  if (pre <= 0 || post <= 0 || post > pre) {
+    alert("Revisa los pesos ingresados.");
+    return;
+  }
 
-    const post =
-      parseFloat(postWeight.value);
+  if (!Number.isFinite(h) || h <= 0) {
+    alert("Ingresa un tiempo de sesión válido.");
+    return;
+  }
 
-    const h =
-      parseFloat(hours.value);
+  const { data: { user }, error: userError } =
+    await supabaseClient.auth.getUser();
 
+  if (userError || !user) {
+    alert("La sesión de usuario no está disponible.");
+    return;
+  }
 
-    if (
-      !date ||
-      !Number.isFinite(pre) ||
-      !Number.isFinite(post)
-    ) {
+  saveSessionButton.disabled = true;
+  saveSessionButton.textContent = "GUARDANDO...";
 
-      alert(
-        "Completa fecha, peso pre y peso post."
-      );
+  try {
+    const sessionData = {
+      patient_id: currentPatient.id,
+      user_id: user.id,
+      session_date: date,
+      pre_weight: pre,
+      post_weight: post,
+      hours: h,
+      vitals: vitals.value.trim(),
+      observations: observations.value.trim()
+    };
 
-      return;
-    }
-
-
-    if (post > pre) {
-
-      alert(
-        "El peso post no puede ser mayor que el peso pre."
-      );
-
-      return;
-    }
-
-
-    if (
-      !Number.isFinite(h) ||
-      h <= 0
-    ) {
-
-      alert(
-        "Ingresa un tiempo de sesión válido."
-      );
-
-      return;
-    }
-
+    let result;
 
     if (editingSessionId) {
-
-      const session =
-        currentPatient.sessions.find(
-          item =>
-            item.id ===
-            editingSessionId
-        );
-
-      if (session) {
-
-        session.date =
-          date;
-
-        session.pre =
-          pre;
-
-        session.post =
-          post;
-
-        session.hours =
-          h;
-
-        session.vitals =
-          vitals.value.trim();
-
-        session.observations =
-          observations.value.trim();
-
-      }
-
+      result = await supabaseClient
+        .from("sessions")
+        .update(sessionData)
+        .eq("id", editingSessionId)
+        .eq("patient_id", currentPatient.id)
+        .eq("user_id", user.id)
+        .select()
+        .single();
     } else {
-
-      currentPatient.sessions.push({
-
-        id:
-          "s" +
-          Date.now(),
-
-        date:
-          date,
-
-        pre:
-          pre,
-
-        post:
-          post,
-
-        hours:
-          h,
-
-        vitals:
-          vitals.value.trim(),
-
-        observations:
-          observations.value.trim()
-
-      });
-
+      result = await supabaseClient
+        .from("sessions")
+        .insert(sessionData)
+        .select()
+        .single();
     }
 
+    if (result.error || !result.data) {
+      throw result.error || new Error("No se recibió la sesión guardada.");
+    }
+
+    const saved = result.data;
+
+    const session = {
+      id: saved.id,
+      date: saved.session_date,
+      pre: Number(saved.pre_weight),
+      post: Number(saved.post_weight),
+      hours: Number(saved.hours),
+      vitals: saved.vitals || "",
+      observations: saved.observations || ""
+    };
+
+    if (editingSessionId) {
+      const index = currentPatient.sessions.findIndex(
+        item => String(item.id) === String(editingSessionId)
+      );
+
+      if (index !== -1) {
+        currentPatient.sessions[index] = session;
+      } else {
+        currentPatient.sessions.push(session);
+      }
+    } else {
+      currentPatient.sessions.push(session);
+    }
 
     currentPatient.sessions.sort(
-      (a, b) =>
-        b.date.localeCompare(a.date)
+      (a, b) => b.date.localeCompare(a.date)
     );
 
-
-    savePatients();
-
-    editingSessionId =
-      null;
-
+    editingSessionId = null;
     renderPatient();
-
     prepareCurrentSession();
 
-    alert(
-      "Sesión guardada."
-    );
+    alert("Sesión guardada correctamente en Supabase.");
 
+  } catch (error) {
+    console.error("Error guardando sesión:", error);
+    alert("NO SE PUDO GUARDAR LA SESIÓN: " + (error?.message || "Error desconocido"));
+
+  } finally {
+    saveSessionButton.disabled = false;
+    saveSessionButton.textContent = "GUARDAR SESIÓN";
   }
-);
-
-
+});
+  
 /* =========================================================
    PENDIENTES
 ========================================================= */
